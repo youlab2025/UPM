@@ -18,6 +18,7 @@ test = ["pytest>=7"]
 [project.scripts]
 upm-infer = "upm.cli:main"
 upm-export = "upm.export:main"
+upm-download = "upm.download:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

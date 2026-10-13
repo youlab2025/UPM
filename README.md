@@ -10,7 +10,7 @@
   <a href="#python-api"><img src="https://img.shields.io/badge/PyTorch-%E2%89%A52.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.1 or later"></a>
   <a href="#checkpoint"><img src="https://img.shields.io/badge/Model-UPM-8054B3?style=flat-square" alt="UPM"></a>
   <a href="#inputs-and-outputs"><img src="https://img.shields.io/badge/AnnData-H5AD-339A94?style=flat-square" alt="AnnData H5AD"></a>
-  <a href="#checkpoint"><img src="https://img.shields.io/badge/Hugging%20Face-weights%20coming%20soon-777777?style=flat-square&logo=huggingface&logoColor=FFD21E" alt="Hugging Face weights coming soon"></a>
+  <a href="https://huggingface.co/zongting/UPM"><img src="https://img.shields.io/badge/Hugging%20Face-checkpoint-FFD21E?style=flat-square&logo=huggingface&logoColor=000000" alt="Hugging Face checkpoint"></a>
 </p>
 
 <p>
@@ -75,10 +75,18 @@ The examples below assume a repository checkout, which includes the VCC example 
 
 ## Checkpoint
 
-> [!NOTE]
-> **Hugging Face weight release is pending.** The inference code is available in this repository; the UPM download link will be added here when the checkpoint is published. The examples below require a local checkpoint bundle.
+The complete inference checkpoint is hosted at **[zongting/UPM on Hugging Face](https://huggingface.co/zongting/UPM)**, together with a copy of the VCC example dataset. The portable bundle is approximately **4.8 GB** and includes the inference weights and required fixed embeddings.
 
-Code is distributed through GitHub, and model weights will be hosted on Hugging Face. The release is scoped to **UPM inference**.
+The checkpoint repository currently requires authorized access. Log in with your own Hugging Face account, then download all six checkpoint files with one command:
+
+```bash
+hf auth login
+upm-download --revision 7f30b5e7521240e89783f1d55b38450deb1bb47c --output checkpoints/upm
+```
+
+If your Hub installation provides `huggingface-cli` instead of `hf`, use `huggingface-cli login`.
+
+`upm-download` verifies file completeness and SHA-256 checksums before reporting success. Downloads can be resumed by running the same command again. To pin a release, add `--revision <HF-commit-hash>`. Allow approximately **10 GB of free disk space** for the Hub cache and independent local copy. `--local-files-only` requires the requested revision to be present in the Hub cache.
 
 A portable checkpoint contains these six files:
 
@@ -94,7 +102,7 @@ checkpoints/upm/
 
 Load the whole bundle with `UPM.from_pretrained("checkpoints/upm")`. The loader verifies file checksums and architecture compatibility. Inference loads Safetensors and NumPy arrays without pickle or a training framework.
 
-The same loader also accepts a Hugging Face repository ID through `from_pretrained(source, revision=...)`, or `--model` and `--revision` on the CLI. Once weights are published, use an explicit Hugging Face commit revision for reproducible runs. `--local-files-only` loads an existing local bundle or cached snapshot without downloading.
+The same loader also accepts `UPM.from_pretrained("zongting/UPM", revision=...)`, or `--model zongting/UPM` and `--revision` on the CLI, and downloads the checkpoint automatically when needed. Use an explicit Hugging Face commit revision for reproducible runs. `--local-files-only` loads an existing local bundle or cached snapshot without downloading.
 
 ## Quickstart
 
@@ -136,7 +144,7 @@ For a combination, put its components in the **same** `perturbations` list. For 
 
 ### 3. Predict
 
-With a local checkpoint bundle at `checkpoints/upm`, run the included example:
+After downloading the checkpoint with `upm-download --output checkpoints/upm`, run the included example:
 
 ```bash
 upm-infer \
@@ -152,6 +160,8 @@ upm-infer \
 This produces **96 predicted cells × 17,956 genes**: 32 predictions per condition, using the same control-cell pool. The observed perturbation cells in `observed.h5ad` are sampled independently and can be inspected alongside the predictions.
 
 Use `--device cuda` for GPU inference, or `--device auto` to select CUDA when available.
+
+To download automatically during inference, replace `--model checkpoints/upm` with `--model zongting/UPM` in the command above. Authenticate first if required.
 
 ### 4. Use your own cells
 
@@ -269,6 +279,7 @@ The trust flag authorizes loading legacy pickle files, which can execute Python 
 | [src/upm/model.py](src/upm/model.py) | UPM model and perturbation interface. |
 | [src/upm/cli.py](src/upm/cli.py) | Control-only H5AD inference. |
 | [src/upm/bundle.py](src/upm/bundle.py) | Local and Hugging Face bundle loading. |
+| [src/upm/download.py](src/upm/download.py) | Complete checkpoint download with checksum verification. |
 | [src/upm/preprocessing.py](src/upm/preprocessing.py) | Expression validation and count normalization. |
 | [src/upm/export.py](src/upm/export.py) | Conversion of trusted legacy UPM checkpoints. |
 | [examples/](examples/) | CLI entry point and example conditions. |

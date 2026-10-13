@@ -94,9 +94,9 @@ def resolve_bundle(source, *, subfolder=None, revision=None, local_files_only=Fa
     }
 
 
-def load_bundle(source, *, subfolder=None, revision=None, device="cpu", local_files_only=False):
-    root, provenance = resolve_bundle(source, subfolder=subfolder, revision=revision,
-                                     local_files_only=local_files_only)
+def verify_bundle(root):
+    """Verify completeness and checksums without allocating model weights."""
+    root = Path(root)
     for name in BUNDLE_FILES:
         if not (root / name).is_file():
             raise FileNotFoundError(root / name)
@@ -106,6 +106,13 @@ def load_bundle(source, *, subfolder=None, revision=None, device="cpu", local_fi
     for name in ASSET_FILES:
         if sha256(root / name) != manifest["sha256"][name]:
             raise ValueError(f"Bundle checksum mismatch: {name}")
+    return manifest
+
+
+def load_bundle(source, *, subfolder=None, revision=None, device="cpu", local_files_only=False):
+    root, provenance = resolve_bundle(source, subfolder=subfolder, revision=revision,
+                                     local_files_only=local_files_only)
+    manifest = verify_bundle(root)
     try:
         config = ModelConfig(**read_json(root / "config.json"))
     except (TypeError, KeyError) as error:
