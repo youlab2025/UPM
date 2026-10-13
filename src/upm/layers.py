@@ -1,4 +1,4 @@
-"""Residual MLPs with parameter names compatible with DataV4L10 weights."""
+"""Residual MLPs with parameter names compatible with UPM weights."""
 from torch import nn
 
 

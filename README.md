@@ -8,7 +8,7 @@
 <p>
   <a href="#installation"><img src="https://img.shields.io/badge/Python-3.10%E2%80%933.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.10–3.12"></a>
   <a href="#python-api"><img src="https://img.shields.io/badge/PyTorch-%E2%89%A52.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.1 or later"></a>
-  <a href="#checkpoint"><img src="https://img.shields.io/badge/Model-DataV4--L10-8054B3?style=flat-square" alt="DataV4-L10"></a>
+  <a href="#checkpoint"><img src="https://img.shields.io/badge/Model-UPM-8054B3?style=flat-square" alt="UPM"></a>
   <a href="#inputs-and-outputs"><img src="https://img.shields.io/badge/AnnData-H5AD-339A94?style=flat-square" alt="AnnData H5AD"></a>
   <a href="#checkpoint"><img src="https://img.shields.io/badge/Hugging%20Face-weights%20coming%20soon-777777?style=flat-square&logo=huggingface&logoColor=FFD21E" alt="Hugging Face weights coming soon"></a>
 </p>
@@ -18,7 +18,8 @@
   <a href="#installation">Installation</a> ·
   <a href="#checkpoint">Checkpoint</a> ·
   <a href="#quickstart">Quickstart</a> ·
-  <a href="#python-api">Python API</a>
+  <a href="#python-api">Python API</a> ·
+  <a href="#citation">Citation</a>
 </p>
 
 <p><i>How Much Can AI Virtual Cells Gain from Unified Perturbational Modeling?</i></p>
@@ -29,15 +30,15 @@
 
 **UPM predicts single-cell transcriptomic responses to genetic, chemical, and cytokine interventions within a shared framework.** It combines the starting cell state with a perturbation representation and decodes the resulting expression profile. Combined interventions supply multiple perturbation inputs to the same model.
 
-This repository provides **DataV4-L10 inference**, the standalone checkpoint used in the paper's Figure 2D–F. It includes a PyTorch model, an AnnData command-line interface, and portable checkpoint loading on CPU or CUDA.
+This repository provides the **UPM inference implementation** for the standalone checkpoint used in the paper's Figure 2D–F. It includes a PyTorch model, an AnnData command-line interface, and portable checkpoint loading on CPU or CUDA.
 
 <p align="center">
-  <a href="assets/fig1.pdf">
-    <img src="assets/fig1.png" width="1000" alt="Figure 1. UPM intervention inputs, model architecture, assembled data resource, and HepG2 response projections.">
+  <a href="assets/fig1_ab.pdf">
+    <img src="assets/fig1_ab.png" width="1000" alt="Figure 1, panels A and B. UPM intervention inputs and model architecture.">
   </a>
 </p>
 
-**Figure 1 | A shared framework for testing unified perturbation modeling.** Cell state and intervention inputs (A), model architecture (B), assembled resource (C), and HepG2 response projections (D). The resource totals in panel C describe the assembled resource, rather than each checkpoint's training exposure. [View the full-resolution PDF →](assets/fig1.pdf)
+**Figure 1A–B | UPM inputs and architecture.** Cell state and genetic, chemical, cytokine, or combined intervention inputs (A); cell state encoding, perturbation encoding, fusion, and expression decoding (B). [View the full-resolution A–B PDF →](assets/fig1_ab.pdf)
 
 | Intervention | Input | Inference behavior |
 | :--- | :--- | :--- |
@@ -77,15 +78,15 @@ The examples below assume a repository checkout. With a direct installation, sup
 ## Checkpoint
 
 > [!NOTE]
-> **Hugging Face weight release is pending.** The inference code is available in this repository; the DataV4-L10 download link will be added here when the checkpoint is published. The examples below require a local checkpoint bundle.
+> **Hugging Face weight release is pending.** The inference code is available in this repository; the UPM download link will be added here when the checkpoint is published. The examples below require a local checkpoint bundle.
 
-Code is distributed through GitHub, and model weights will be hosted on Hugging Face. The release is scoped to **DataV4-L10 inference**.
+Code is distributed through GitHub, and model weights will be hosted on Hugging Face. The release is scoped to **UPM inference**.
 
 A portable checkpoint contains these six files:
 
 ```text
-checkpoints/datav4-l10/
-├── config.json           # DataV4-L10 architecture and dimensions
+checkpoints/upm/
+├── config.json           # UPM architecture and dimensions
 ├── genes.json            # Expression gene channels and aliases
 ├── perturbations.json    # Gene, molecule, and cytokine vocabularies
 ├── embeddings.npz        # Fixed perturbation embeddings
@@ -93,7 +94,7 @@ checkpoints/datav4-l10/
 └── manifest.json         # File checksums and bundle metadata
 ```
 
-Load the whole bundle with `DataV4L10.from_pretrained("checkpoints/datav4-l10")`. The loader verifies file checksums and architecture compatibility. Inference loads Safetensors and NumPy arrays without pickle or a training framework.
+Load the whole bundle with `UPM.from_pretrained("checkpoints/upm")`. The loader verifies file checksums and architecture compatibility. Inference loads Safetensors and NumPy arrays without pickle or a training framework.
 
 The same loader also accepts a Hugging Face repository ID through `from_pretrained(source, revision=...)`, or `--model` and `--revision` on the CLI. Once weights are published, use an explicit Hugging Face commit revision for reproducible runs. `--local-files-only` loads an existing local bundle or cached snapshot without downloading.
 
@@ -124,11 +125,11 @@ For a combination, put its components in the **same** `perturbations` list. For 
 
 ### 3. Predict
 
-With raw counts in `.X` and a local bundle at `checkpoints/datav4-l10`:
+With raw counts in `.X` and a local bundle at `checkpoints/upm`:
 
 ```bash
 upm-infer \
-  --model checkpoints/datav4-l10 \
+  --model checkpoints/upm \
   --control controls.h5ad \
   --conditions examples/conditions.json \
   --input-space counts \
@@ -148,13 +149,13 @@ Load, align, and predict. Gene alignment is performed **once per model instance*
 ```python
 import anndata as ad
 
-from upm import DataV4L10, Perturbation
+from upm import UPM, Perturbation
 from upm.preprocessing import prepare_controls
 
 adata = ad.read_h5ad("controls.h5ad")
 controls = prepare_controls(adata.X, input_space="counts")
 
-model = DataV4L10.from_pretrained("checkpoints/datav4-l10", device="cpu")
+model = UPM.from_pretrained("checkpoints/upm", device="cpu")
 model.align_genes(adata.var_names.tolist())  # Ensembl IDs, in input column order
 
 predicted = model.predict(
@@ -224,15 +225,15 @@ Output genes remain in the input order. Predictions undergo native CP10K normali
 ## Advanced: exporting a legacy checkpoint
 
 <details>
-<summary><b>For owners of a trusted DataV4-L10 training checkpoint</b></summary>
+<summary><b>For owners of a trusted UPM training checkpoint</b></summary>
 
 Convert `args.pt`, `ensgids_all.pt`, and `best.ckpt` together with the exact perturbation embedding assets used for that checkpoint:
 
 ```bash
 upm-export \
-  --checkpoint-dir /path/to/datav4-l10/checkpoint \
+  --checkpoint-dir /path/to/upm/checkpoint \
   --embedding-dir /path/to/matching/embedding-assets \
-  --output checkpoints/datav4-l10 \
+  --output checkpoints/upm \
   --trust-legacy-pickle
 ```
 
@@ -244,12 +245,20 @@ The trust flag authorizes loading legacy pickle files, which can execute Python 
 
 | Path | Contents |
 | :--- | :--- |
-| [src/upm/model.py](src/upm/model.py) | DataV4-L10 model and perturbation interface. |
+| [src/upm/model.py](src/upm/model.py) | UPM model and perturbation interface. |
 | [src/upm/cli.py](src/upm/cli.py) | Control-only H5AD inference. |
 | [src/upm/bundle.py](src/upm/bundle.py) | Local and Hugging Face bundle loading. |
 | [src/upm/preprocessing.py](src/upm/preprocessing.py) | Expression validation and count normalization. |
-| [src/upm/export.py](src/upm/export.py) | Conversion of trusted legacy L10 checkpoints. |
+| [src/upm/export.py](src/upm/export.py) | Conversion of trusted legacy UPM checkpoints. |
 | [examples/](examples/) | CLI entry point and example conditions. |
 | [tests/](tests/) | Model, preprocessing, checkpoint, and CLI checks. |
 
 For usage questions or reproducible problems, [open a GitHub issue](https://github.com/zongtingwei/UPM/issues) with the command, package versions, and error message.
+
+## Citation
+
+If you use this code, please cite our paper:
+
+> **How Much Can AI Virtual Cells Gain from Unified Perturbational Modeling?**
+
+Publication details and BibTeX will be added here when available.

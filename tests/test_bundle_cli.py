@@ -9,8 +9,8 @@ import pytest
 import torch
 from scipy import sparse
 
-from upm import DataV4L10, Perturbation
-from upm.bundle import save_bundle
+from upm import UPM, Perturbation
+from upm.bundle import save_bundle, sha256, write_json
 from upm.cli import main
 from upm.export import export_checkpoint
 
@@ -21,7 +21,7 @@ def test_safe_bundle_roundtrip(model, controls, tmp_path):
     assert {p.name for p in root.iterdir()} == {
         "config.json", "genes.json", "perturbations.json", "embeddings.npz",
         "model.safetensors", "manifest.json"}
-    loaded = DataV4L10.from_pretrained(root)
+    loaded = UPM.from_pretrained(root)
     p = Perturbation("crispri", "TP53")
     np.testing.assert_array_equal(loaded.predict(controls, p), model.predict(controls, p))
     with pytest.raises(FileExistsError):
@@ -33,7 +33,24 @@ def test_corrupt_bundle_fails_before_loading_weights(model, tmp_path):
     save_bundle(model, root)
     (root / "genes.json").write_text('["WRONG"]')
     with pytest.raises(ValueError, match="checksum"):
-        DataV4L10.from_pretrained(root)
+        UPM.from_pretrained(root)
+
+
+def test_legacy_bundle_keeps_identical_predictions(model, controls, tmp_path):
+    root = tmp_path / "legacy_bundle"
+    save_bundle(model, root)
+    config = json.loads((root / "config.json").read_text())
+    config["architecture"] = "DataV4-L10"
+    write_json(root / "config.json", config)
+    manifest = json.loads((root / "manifest.json").read_text())
+    manifest["sha256"]["config.json"] = sha256(root / "config.json")
+    write_json(root / "manifest.json", manifest)
+    loaded = UPM.from_pretrained(root)
+    assert loaded.config.architecture == "UPM"
+    np.testing.assert_array_equal(
+        loaded.predict(controls, Perturbation("crispri", "TP53")),
+        model.predict(controls, Perturbation("crispri", "TP53")),
+    )
 
 
 def test_legacy_pickle_requires_explicit_trust(tmp_path):
@@ -60,14 +77,14 @@ def test_export_strips_training_state_and_keeps_inference(model, controls, tmp_p
         np.save(embedding / (singular + "_embeddings.npy"),
                 getattr(model, singular + "_embeddings").numpy())
     export_checkpoint(checkpoint, embedding, tmp_path / "export", trust_legacy_pickle=True)
-    loaded = DataV4L10.from_pretrained(tmp_path / "export")
+    loaded = UPM.from_pretrained(tmp_path / "export")
     assert not hasattr(loaded, "optimizer_states")
     np.testing.assert_array_equal(loaded.predict(controls, Perturbation("crispra", "MYC")),
                                   model.predict(controls, Perturbation("crispra", "MYC")))
 
 
 def test_cli_h5ad_preserves_axes_and_conditions(model, tmp_path):
-    save_bundle(model, tmp_path / "l10")
+    save_bundle(model, tmp_path / "upm")
     counts = np.array([[1., 3., 2.], [0., 2., 3.]])
     data = ad.AnnData(sparse.csr_matrix(counts),
                      obs=pd.DataFrame({"cell_type": ["A", "B"]}, index=["c1", "c2"]),
@@ -81,7 +98,7 @@ def test_cli_h5ad_preserves_axes_and_conditions(model, tmp_path):
     condition_path = tmp_path / "conditions.json"
     condition_path.write_text(json.dumps(conditions))
     out = tmp_path / "predictions.h5ad"
-    main(["--model", str(tmp_path / "l10"),
+    main(["--model", str(tmp_path / "upm"),
           "--control", str(input_path), "--conditions", str(condition_path),
           "--input-space", "counts", "--gene-id-column", "ensembl",
           "--output", str(out), "--device", "cpu", "--batch-size", "1"])
@@ -94,12 +111,12 @@ def test_cli_h5ad_preserves_axes_and_conditions(model, tmp_path):
     np.testing.assert_array_equal(result.var["upm_covered"].to_numpy(), [True, True, False])
     normalized = np.log1p(counts / counts.sum(1, keepdims=True) * 1e4).astype(np.float32)
     np.testing.assert_array_equal(result.X[:, 2], np.tile(normalized[:, 2], 2))
-    m1 = DataV4L10.from_pretrained(tmp_path / "l10").align_genes(["ENSG2", "ENSG1", "UNKNOWN"])
+    m1 = UPM.from_pretrained(tmp_path / "upm").align_genes(["ENSG2", "ENSG1", "UNKNOWN"])
     expected = m1.predict(normalized, Perturbation("crispri", "TP53"), batch_size=1)
     np.testing.assert_array_equal(result.X[:2], expected)
-    assert result.uns["upm"]["model_variant"] == "DataV4-L10"
+    assert result.uns["upm"]["model_name"] == "UPM"
     with pytest.raises(FileExistsError):
-        main(["--model", str(tmp_path / "l10"), "--control", str(input_path),
+        main(["--model", str(tmp_path / "upm"), "--control", str(input_path),
               "--conditions", str(condition_path), "--input-space", "counts", "--output", str(out)])
 
 

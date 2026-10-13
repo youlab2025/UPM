@@ -1,7 +1,7 @@
-"""DataV4-L10 inference on control cells in H5AD format.
+"""UPM inference on control cells in H5AD format.
 
 Example:
-  upm-infer --model checkpoints/datav4-l10 --control controls.h5ad
+  upm-infer --model checkpoints/upm --control controls.h5ad
     --conditions conditions.json --input-space counts --output predicted.h5ad
 
 conditions.json is a nonempty list, for example:
@@ -28,7 +28,7 @@ import torch
 
 from . import __version__
 from .bundle import read_json
-from .model import DataV4L10, Perturbation, gene_channels
+from .model import UPM, Perturbation, gene_channels
 from .preprocessing import prepare_controls
 
 
@@ -56,7 +56,7 @@ def read_conditions(path):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--model", required=True, help="Local DataV4-L10 bundle or Hugging Face owner/repo")
+    parser.add_argument("--model", required=True, help="Local UPM bundle or Hugging Face owner/repo")
     parser.add_argument("--subfolder", help="Bundle subfolder inside the local directory or HF repository")
     parser.add_argument("--revision", help="HF revision; use a commit hash for reproducibility")
     parser.add_argument("--local-files-only", action="store_true", help="Load from disk/HF cache without downloading")
@@ -94,7 +94,7 @@ def main(argv=None):
     if len(genes) != data.n_vars:
         raise ValueError("Gene alias count must match the control gene columns")
     device = ("cuda" if torch.cuda.is_available() else "cpu") if args.device == "auto" else args.device
-    model = DataV4L10.from_pretrained(args.model, subfolder=args.subfolder, revision=args.revision,
+    model = UPM.from_pretrained(args.model, subfolder=args.subfolder, revision=args.revision,
                                      device=device, local_files_only=args.local_files_only)
     model.align_genes(genes, unknown_gene=args.unknown_gene)
     predictions, annotations = [], []
@@ -113,7 +113,7 @@ def main(argv=None):
     var["upm_covered"] = model.coverage
     result = ad.AnnData(np.concatenate(predictions), obs=pd.concat(annotations), var=var)
     result.uns["upm"] = {
-        "version": __version__, "model_variant": "DataV4-L10",
+        "version": __version__, "model_name": "UPM",
         "model_source": json.dumps(model.source, ensure_ascii=False),
         "conditions": json.dumps([{"id": name, "perturbations": [asdict(p) for p in ps]}
                                   for name, ps in conditions], ensure_ascii=False),

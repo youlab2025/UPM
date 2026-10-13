@@ -1,4 +1,4 @@
-"""Deterministic DataV4L10 inference without training-framework dependencies."""
+"""Deterministic UPM inference without training-framework dependencies."""
 from dataclasses import dataclass
 import math
 
@@ -17,7 +17,7 @@ class ModelConfig:
     num_layers: int
     gene_embedding_dim: int
     molecule_embedding_dim: int
-    architecture: str = "DataV4-L10"
+    architecture: str = "UPM"
     format_version: int = 1
 
     def __post_init__(self):
@@ -25,8 +25,11 @@ class ModelConfig:
                       self.gene_embedding_dim, self.molecule_embedding_dim):
             if type(value) is not int or value <= 0:
                 raise ValueError("Model dimensions must be positive integers")
-        if self.num_layers != 10 or self.architecture != "DataV4-L10" or self.format_version != 1:
-            raise ValueError("Unsupported DataV4L10 architecture or bundle version")
+        # Existing portable bundles retain their original architecture tag.
+        if self.architecture == "DataV4-L10":
+            object.__setattr__(self, "architecture", "UPM")
+        if self.num_layers != 10 or self.architecture != "UPM" or self.format_version != 1:
+            raise ValueError("Unsupported UPM architecture or bundle version")
 
 
 @dataclass(frozen=True)
@@ -68,8 +71,8 @@ def gene_channels(genes):
     return channels
 
 
-class DataV4L10(nn.Module):
-    """Inference architecture matching the DataV4-L10 checkpoint.
+class UPM(nn.Module):
+    """Inference architecture matching the UPM checkpoint.
 
     Gene alignment replaces input/output weights once, using mean weights for
     aliases that match multiple source channels. Missing genes receive zero
@@ -224,4 +227,8 @@ class DataV4L10(nn.Module):
             predicted[:, ~self.coverage] = chunk[:, ~self.coverage]
             output[start:start + len(chunk)] = predicted
         return output
+
+
+# Compatibility with the pre-release model class name.
+DataV4L10 = UPM
 

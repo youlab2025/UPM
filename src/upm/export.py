@@ -1,4 +1,4 @@
-"""One-time conversion of trusted DataV4-L10 Lightning checkpoints.
+"""One-time conversion of trusted UPM Lightning checkpoints.
 
 Usage: upm-export --checkpoint-dir PATH --embedding-dir PATH --output PATH
                  --trust-legacy-pickle
@@ -14,7 +14,7 @@ import numpy as np
 import torch
 
 from .bundle import save_bundle
-from .model import DataV4L10, ModelConfig
+from .model import UPM, ModelConfig
 
 
 def _legacy_load(path, *, mmap=False):
@@ -29,9 +29,9 @@ def export_checkpoint(checkpoint_dir, embedding_dir, output, *, trust_legacy_pic
         raise FileExistsError(output)
     args = _legacy_load(checkpoint_dir / "args.pt")
     if "#datav4" not in str(getattr(args, "log_dir", "")).lower():
-        raise ValueError("Expected a DataV4L10 checkpoint (args.log_dir must contain #datav4)")
+        raise ValueError("Checkpoint training metadata does not match the supported UPM release")
     if args.num_mlp_layers_in_module != 10:
-        raise ValueError("Only DataV4-L10 checkpoints are supported")
+        raise ValueError("Checkpoint depth does not match the supported UPM architecture")
     genes = _legacy_load(checkpoint_dir / "ensgids_all.pt")
     proteins = _legacy_load(embedding_dir / "uniprots.pt")
     protein_index = {}
@@ -60,7 +60,7 @@ def export_checkpoint(checkpoint_dir, embedding_dir, output, *, trust_legacy_pic
                          gene_embedding_dim=gene_embeddings.shape[1],
                          molecule_embedding_dim=molecule_embeddings.shape[1])
     with torch.device("meta"):
-        model = DataV4L10(config, genes, {"genes": [name for name, _ in mapping],
+        model = UPM(config, genes, {"genes": [name for name, _ in mapping],
                        "molecules": molecules, "cytokines": cytokines},
                        {"genes": gene_embeddings, "molecules": molecule_embeddings,
                         "cytokines": cytokine_embeddings})
@@ -68,7 +68,7 @@ def export_checkpoint(checkpoint_dir, embedding_dir, output, *, trust_legacy_pic
     model.load_state_dict(checkpoint["state_dict"], strict=True, assign=True)
     del checkpoint  # optimizer and training state never enter the exported bundle
     return save_bundle(model, output, metadata={
-        "data_version": "DataV4", "variant": f"L{config.num_layers}",
+        "model_name": "UPM",
         "checkpoint": "best.ckpt", "prediction_mode": "legacy deterministic VAE mean",
     })
 

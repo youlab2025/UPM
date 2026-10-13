@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import torch
 
-from upm import DataV4L10, ModelConfig
+from upm import UPM, ModelConfig
 
 
 @pytest.fixture
@@ -10,7 +10,7 @@ def model():
     torch.manual_seed(13)
     config = ModelConfig(in_dim=3, hidden_dim=4, num_layers=10,
                          gene_embedding_dim=2, molecule_embedding_dim=3)
-    return DataV4L10(
+    return UPM(
         config, genes=[["ENSG1"], ["ENSG2"], ["ENSG3"]],
         perturbations={"genes": ["TP53", "MYC"], "molecules": ["DrugA"],
                        "cytokines": ["IFNG"]},

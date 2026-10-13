@@ -11,7 +11,7 @@ import torch
 from safetensors import safe_open
 from safetensors.torch import load_file, save_file
 
-from .model import DataV4L10, ModelConfig
+from .model import UPM, ModelConfig
 
 ASSET_FILES = ("config.json", "genes.json", "perturbations.json",
                "embeddings.npz", "model.safetensors")
@@ -109,17 +109,17 @@ def load_bundle(source, *, subfolder=None, revision=None, device="cpu", local_fi
     try:
         config = ModelConfig(**read_json(root / "config.json"))
     except (TypeError, KeyError) as error:
-        raise ValueError("Invalid DataV4L10 configuration") from error
+        raise ValueError("Invalid UPM configuration") from error
     with np.load(root / "embeddings.npz", allow_pickle=False) as assets:
         if set(assets.files) != {"genes", "molecules", "cytokines"}:
             raise ValueError("Invalid embedding assets")
         embeddings = {name: assets[name] for name in assets.files}
     with safe_open(root / "model.safetensors", framework="pt", device="cpu") as weights:
         if any(weights.get_slice(key).get_dtype() != "F32" for key in weights.keys()):
-            raise ValueError("DataV4L10 inference weights must be float32")
+            raise ValueError("UPM inference weights must be float32")
     # Meta construction avoids allocating a second full set of multi-GB weights.
     with torch.device("meta"):
-        model = DataV4L10(config, read_json(root / "genes.json"),
+        model = UPM(config, read_json(root / "genes.json"),
                        read_json(root / "perturbations.json"), embeddings)
     model.load_state_dict(load_file(root / "model.safetensors", device="cpu"), strict=True, assign=True)
     model.source = {**provenance, "metadata": manifest.get("metadata", {})}
