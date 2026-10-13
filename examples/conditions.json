@@ -1,0 +1,4 @@
+[
+  {"id": "TP53_CRISPRi", "perturbations": [{"type": "crispri", "name": "TP53"}]},
+  {"id": "MYC_CRISPRa", "perturbations": [{"type": "crispra", "name": "MYC"}]}
+]
