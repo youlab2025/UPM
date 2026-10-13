@@ -38,8 +38,6 @@ This repository provides the **UPM inference implementation** for the standalone
   </a>
 </p>
 
-**Figure 1A–B | UPM inputs and architecture.** Cell state and genetic, chemical, cytokine, or combined intervention inputs (A); cell state encoding, perturbation encoding, fusion, and expression decoding (B). [View the full-resolution A–B PDF →](assets/fig1_ab.pdf)
-
 | Intervention | Input | Inference behavior |
 | :--- | :--- | :--- |
 | **Gene editing** | A gene name and `crispri` or `crispra` | Predict repression or activation responses. |
