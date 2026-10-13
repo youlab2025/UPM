@@ -1,0 +1,29 @@
+[
+  {
+    "id": "STAT1_CRISPRi",
+    "perturbations": [
+      {
+        "type": "crispri",
+        "name": "STAT1"
+      }
+    ]
+  },
+  {
+    "id": "MED12_CRISPRi",
+    "perturbations": [
+      {
+        "type": "crispri",
+        "name": "MED12"
+      }
+    ]
+  },
+  {
+    "id": "TADA1_CRISPRi",
+    "perturbations": [
+      {
+        "type": "crispri",
+        "name": "TADA1"
+      }
+    ]
+  }
+]

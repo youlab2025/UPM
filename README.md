@@ -69,7 +69,7 @@ upm-infer --help
 python -m pip install git+https://github.com/zongtingwei/UPM.git
 ```
 
-The examples below assume a repository checkout. With a direct installation, supply your own conditions JSON file in place of `examples/conditions.json`.
+The examples below assume a repository checkout, which includes the VCC example dataset. With a direct installation, supply your own control cells and conditions JSON file.
 
 </details>
 
@@ -98,23 +98,36 @@ The same loader also accepts a Hugging Face repository ID through `from_pretrain
 
 ## Quickstart
 
-### 1. Prepare control cells
+### 1. Use the VCC example
 
-Use a **control-only** AnnData file from the cell context you want to perturb. By default, UPM reads expression from `.X` and uses Ensembl identifiers in `.var_names`. Keep all measured gene columns when normalizing raw counts.
+A small example from the [Virtual Cell Challenge 2025](https://github.com/ArcInstitute/arc-virtual-cell-atlas/blob/main/virtual-cell-challenge/README.md) **H1 human embryonic stem cell training split** is included in [examples/vcc](examples/vcc). It contains 32 non-targeting control cells and 32 observed cells each for **STAT1**, **MED12**, and **TADA1** CRISPRi, sampled without replacement with seed 0.
+
+| File | Contents |
+| :--- | :--- |
+| [controls.h5ad](examples/vcc/controls.h5ad) | 32 control cells used as the inference input. |
+| [observed.h5ad](examples/vcc/observed.h5ad) | 96 separate, experimentally observed perturbation cells for inspection. |
+| [conditions.json](examples/vcc/conditions.json) | The three CRISPRi conditions to predict. |
+| [provenance.json](examples/vcc/provenance.json) | Data source, sampled rows, normalization, and file checksums. |
+
+Both AnnData files retain all **17,956 measured genes** from the processed source. `.X` is already **`log1p(CP10K)`**, `.var_names` contains Ensembl gene IDs, and `.var["gene_name"]` contains gene symbols. Use `--input-space log1p-cp10k` for this example.
 
 ### 2. Define interventions
 
-Each condition has a unique `id` and a nonempty list of `perturbations`. The provided [examples/conditions.json](examples/conditions.json) contains:
+Each condition has a unique `id` and a nonempty list of `perturbations`. The VCC example's [conditions.json](examples/vcc/conditions.json) contains:
 
 ```json
 [
   {
-    "id": "TP53_CRISPRi",
-    "perturbations": [{"type": "crispri", "name": "TP53"}]
+    "id": "STAT1_CRISPRi",
+    "perturbations": [{"type": "crispri", "name": "STAT1"}]
   },
   {
-    "id": "MYC_CRISPRa",
-    "perturbations": [{"type": "crispra", "name": "MYC"}]
+    "id": "MED12_CRISPRi",
+    "perturbations": [{"type": "crispri", "name": "MED12"}]
+  },
+  {
+    "id": "TADA1_CRISPRi",
+    "perturbations": [{"type": "crispri", "name": "TADA1"}]
   }
 ]
 ```
@@ -123,20 +136,30 @@ For a combination, put its components in the **same** `perturbations` list. For 
 
 ### 3. Predict
 
-With raw counts in `.X` and a local bundle at `checkpoints/upm`:
+With a local checkpoint bundle at `checkpoints/upm`, run the included example:
 
 ```bash
 upm-infer \
   --model checkpoints/upm \
-  --control controls.h5ad \
-  --conditions examples/conditions.json \
-  --input-space counts \
+  --control examples/vcc/controls.h5ad \
+  --conditions examples/vcc/conditions.json \
+  --input-space log1p-cp10k \
   --device cpu \
-  --batch-size 256 \
+  --batch-size 32 \
   --output predictions.h5ad
 ```
 
-Use `--device cuda` for GPU inference, or `--device auto` to select CUDA when available. If `.X` is already `log1p(CP10K)`, set `--input-space log1p-cp10k`. If raw counts are in `.layers["counts"]`, add `--layer counts`. If Ensembl IDs are stored in `.var["ensembl_id"]`, add `--gene-id-column ensembl_id`.
+This produces **96 predicted cells × 17,956 genes**: 32 predictions per condition, using the same control-cell pool. The observed perturbation cells in `observed.h5ad` are sampled independently and can be inspected alongside the predictions.
+
+Use `--device cuda` for GPU inference, or `--device auto` to select CUDA when available.
+
+### 4. Use your own cells
+
+Supply a **control-only** AnnData file from the cell context you want to perturb and a conditions JSON file. By default, UPM reads `.X` and uses Ensembl identifiers in `.var_names`.
+
+- For raw counts, set `--input-space counts` and keep all measured gene columns when normalizing. If counts are in `.layers["counts"]`, also add `--layer counts`.
+- For expression already in `log1p(CP10K)`, set `--input-space log1p-cp10k`.
+- If Ensembl IDs are stored in `.var["ensembl_id"]`, add `--gene-id-column ensembl_id`.
 
 Each condition uses the same supplied control-cell pool. With two conditions and 1,000 controls, the output contains 2,000 predicted cells in the input gene order.
 
@@ -150,16 +173,16 @@ import anndata as ad
 from upm import UPM, Perturbation
 from upm.preprocessing import prepare_controls
 
-adata = ad.read_h5ad("controls.h5ad")
-controls = prepare_controls(adata.X, input_space="counts")
+adata = ad.read_h5ad("examples/vcc/controls.h5ad")
+controls = prepare_controls(adata.X, input_space="log1p-cp10k")
 
 model = UPM.from_pretrained("checkpoints/upm", device="cpu")
 model.align_genes(adata.var_names.tolist())  # Ensembl IDs, in input column order
 
 predicted = model.predict(
     controls,
-    Perturbation(type="crispri", name="TP53"),
-    batch_size=256,
+    Perturbation(type="crispri", name="STAT1"),
+    batch_size=32,
 )
 
 # Float32 log-expression, with the same cells × genes shape as controls.
