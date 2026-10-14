@@ -3,8 +3,6 @@
 <h1>UPM</h1>
 <h3>Unified Perturbation Modeling</h3>
 
-<p><b>From a cell's starting state to its response to an intervention.</b></p>
-
 <p>
   <a href="#installation"><img src="https://img.shields.io/badge/Python-3.10%E2%80%933.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.10–3.12"></a>
   <a href="#python-api"><img src="https://img.shields.io/badge/PyTorch-%E2%89%A52.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.1 or later"></a>
