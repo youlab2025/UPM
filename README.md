@@ -55,7 +55,7 @@ Use **Python 3.10–3.12**. For CUDA inference, install a compatible PyTorch bui
 conda create -n upm python=3.11 -y
 conda activate upm
 
-git clone https://github.com/zongtingwei/UPM.git
+git clone https://github.com/youlab2025/UPM.git
 cd UPM
 python -m pip install -e .
 
@@ -66,7 +66,7 @@ upm-infer --help
 <summary><b>Install directly from GitHub</b></summary>
 
 ```bash
-python -m pip install git+https://github.com/zongtingwei/UPM.git
+python -m pip install git+https://github.com/youlab2025/UPM.git
 ```
 
 The examples below assume a repository checkout, which includes the VCC example dataset. With a direct installation, supply your own control cells and conditions JSON file.
@@ -285,7 +285,7 @@ The trust flag authorizes loading legacy pickle files, which can execute Python 
 | [examples/](examples/) | CLI entry point and example conditions. |
 | [tests/](tests/) | Model, preprocessing, checkpoint, and CLI checks. |
 
-For usage questions or reproducible problems, [open a GitHub issue](https://github.com/zongtingwei/UPM/issues) with the command, package versions, and error message.
+For usage questions or reproducible problems, [open a GitHub issue](https://github.com/youlab2025/UPM/issues) with the command, package versions, and error message.
 
 ## Citation
 
