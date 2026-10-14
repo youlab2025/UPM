@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<picture><img src="./assets/github-icon.svg" width="18" height="18" align="texttop" alt="GitHub"></picture>&nbsp;<a href="https://github.com/youlab2025/UPM"><strong>GitHub Code</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" width="18" height="18" align="texttop" alt="Hugging Face"></picture>&nbsp;<a href="https://huggingface.co/youlab2025/UPM"><strong>Hugging Face Checkpoints</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="./assets/paper-icon.svg" width="18" height="18" align="texttop" alt="Paper"></picture>&nbsp;<strong>bioRxiv (Coming soon)</strong>
+<picture><img src="./assets/github-icon.svg" width="18" height="18" align="texttop" alt="GitHub"></picture>&nbsp;<a href="https://github.com/youlab2025/UPM"><strong>GitHub Code</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" width="18" height="18" align="texttop" alt="Hugging Face"></picture>&nbsp;<a href="https://huggingface.co/youlab2025/UPM"><strong>Hugging Face Checkpoints</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="./assets/biorxiv-icon.svg" width="18" height="18" align="texttop" alt="bioRxiv"></picture>&nbsp;<strong>bioRxiv (Coming soon)</strong>
 </p>
 
 <p>
