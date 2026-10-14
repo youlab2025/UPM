@@ -8,7 +8,7 @@ from .bundle import BUNDLE_FILES, verify_bundle
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo-id", default="zongting/UPM", help="Hugging Face model repository")
+    parser.add_argument("--repo-id", default="youlab2025/UPM", help="Hugging Face model repository")
     parser.add_argument("--revision", help="HF commit hash, tag, or branch")
     parser.add_argument("--output", default="checkpoints/upm", help="Checkpoint directory")
     parser.add_argument("--local-files-only", action="store_true", help="Use existing local/cache files")

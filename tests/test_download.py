@@ -18,7 +18,7 @@ def cached_bundle(model, tmp_path, monkeypatch):
     """Use a real revision-specific HF cache; no network download doubles."""
     cache = tmp_path / "cache"
     monkeypatch.setattr(constants, "HF_HUB_CACHE", str(cache))
-    return save_bundle(model, cache / "models--zongting--UPM" / "snapshots" / REVISION)
+    return save_bundle(model, cache / "models--youlab2025--UPM" / "snapshots" / REVISION)
 
 
 def arguments(destination, revision=REVISION):

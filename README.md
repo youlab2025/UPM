@@ -10,7 +10,7 @@
   <a href="#python-api"><img src="https://img.shields.io/badge/PyTorch-%E2%89%A52.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.1 or later"></a>
   <a href="#checkpoint"><img src="https://img.shields.io/badge/Model-UPM-8054B3?style=flat-square" alt="UPM"></a>
   <a href="#inputs-and-outputs"><img src="https://img.shields.io/badge/AnnData-H5AD-339A94?style=flat-square" alt="AnnData H5AD"></a>
-  <a href="https://huggingface.co/zongting/UPM"><img src="https://img.shields.io/badge/Hugging%20Face-checkpoint-FFD21E?style=flat-square&logo=huggingface&logoColor=000000" alt="Hugging Face checkpoint"></a>
+  <a href="https://huggingface.co/youlab2025/UPM"><img src="https://img.shields.io/badge/Hugging%20Face-checkpoint-FFD21E?style=flat-square&logo=huggingface&logoColor=000000" alt="Hugging Face checkpoint"></a>
 </p>
 
 <p>
@@ -75,13 +75,13 @@ The examples below assume a repository checkout, which includes the VCC example 
 
 ## Checkpoint
 
-The complete inference checkpoint is hosted at **[zongting/UPM on Hugging Face](https://huggingface.co/zongting/UPM)**, together with a copy of the VCC example dataset. The portable bundle is approximately **4.8 GB** and includes the inference weights and required fixed embeddings.
+The complete inference checkpoint is hosted at **[youlab2025/UPM on Hugging Face](https://huggingface.co/youlab2025/UPM)**, together with a copy of the VCC example dataset. The portable bundle is approximately **4.8 GB** and includes the inference weights and required fixed embeddings.
 
 The checkpoint repository currently requires authorized access. Log in with your own Hugging Face account, then download all six checkpoint files with one command:
 
 ```bash
 hf auth login
-upm-download --revision 7f30b5e7521240e89783f1d55b38450deb1bb47c --output checkpoints/upm
+upm-download --revision 689cbbc8500e3b4f5ed7f7fad3ce1f2d299bd514 --output checkpoints/upm
 ```
 
 If your Hub installation provides `huggingface-cli` instead of `hf`, use `huggingface-cli login`.
@@ -102,7 +102,7 @@ checkpoints/upm/
 
 Load the whole bundle with `UPM.from_pretrained("checkpoints/upm")`. The loader verifies file checksums and architecture compatibility. Inference loads Safetensors and NumPy arrays without pickle or a training framework.
 
-The same loader also accepts `UPM.from_pretrained("zongting/UPM", revision=...)`, or `--model zongting/UPM` and `--revision` on the CLI, and downloads the checkpoint automatically when needed. Use an explicit Hugging Face commit revision for reproducible runs. `--local-files-only` loads an existing local bundle or cached snapshot without downloading.
+The same loader also accepts `UPM.from_pretrained("youlab2025/UPM", revision=...)`, or `--model youlab2025/UPM` and `--revision` on the CLI, and downloads the checkpoint automatically when needed. Use an explicit Hugging Face commit revision for reproducible runs. `--local-files-only` loads an existing local bundle or cached snapshot without downloading.
 
 ## Quickstart
 
@@ -144,7 +144,7 @@ For a combination, put its components in the **same** `perturbations` list. For 
 
 ### 3. Predict
 
-After downloading the checkpoint with `upm-download --output checkpoints/upm`, run the included example:
+After downloading the checkpoint with `upm-download --revision 689cbbc8500e3b4f5ed7f7fad3ce1f2d299bd514 --output checkpoints/upm`, run the included example:
 
 ```bash
 upm-infer \
@@ -161,7 +161,7 @@ This produces **96 predicted cells × 17,956 genes**: 32 predictions per conditi
 
 Use `--device cuda` for GPU inference, or `--device auto` to select CUDA when available.
 
-To download automatically during inference, replace `--model checkpoints/upm` with `--model zongting/UPM` in the command above. Authenticate first if required.
+To download automatically during inference, replace `--model checkpoints/upm` with `--model youlab2025/UPM` in the command above. Authenticate first if required.
 
 ### 4. Use your own cells
 
