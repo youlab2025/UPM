@@ -4,15 +4,11 @@
 <h3>Unified Perturbation Modeling</h3>
 
 <p align="center">
-<a href="https://github.com/youlab2025/UPM"><img src="https://img.shields.io/badge/GitHub-Code-171C2C?style=flat-square&logo=github" height="20" alt="Code on GitHub"></a>&nbsp;&nbsp;&nbsp;<a href="https://huggingface.co/youlab2025/UPM/tree/main"><img src="https://img.shields.io/badge/Hugging%20Face-Checkpoint-FFD21E?style=flat-square&logo=huggingface&logoColor=000000" height="20" alt="Checkpoint files"></a>
+<a href="https://github.com/youlab2025/UPM"><img src="https://img.shields.io/badge/GitHub-Code-171C2C?style=flat-square&logo=github" height="18" alt="Code on GitHub"></a>&nbsp;&nbsp;<a href="https://huggingface.co/youlab2025/UPM/tree/main"><img src="https://img.shields.io/badge/Hugging%20Face-Checkpoint-FFD21E?style=flat-square&logo=huggingface&logoColor=000000" height="18" alt="Checkpoint files"></a>&nbsp;&nbsp;<a href="#installation"><img src="https://img.shields.io/badge/Python-3.10%E2%80%933.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.10–3.12" height="18"></a>&nbsp;&nbsp;<a href="#python-api"><img src="https://img.shields.io/badge/PyTorch-%E2%89%A52.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.1 or later" height="18"></a>&nbsp;&nbsp;<a href="#checkpoint"><img src="https://img.shields.io/badge/Model-UPM-8054B3?style=flat-square" alt="UPM" height="18"></a>&nbsp;&nbsp;<a href="#inputs-and-outputs"><img src="https://img.shields.io/badge/AnnData-H5AD-339A94?style=flat-square" alt="AnnData H5AD" height="18"></a>
 </p>
 
 <p align="center">
 <a href="https://github.com/youlab2025/UPM"><img src="https://github.githubassets.com/favicons/favicon.svg" width="18" height="18" alt="GitHub">&nbsp;<strong>GitHub Code</strong></a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://huggingface.co/youlab2025/UPM"><img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" width="18" height="18" alt="Hugging Face">&nbsp;<strong>Hugging Face Checkpoints</strong></a>
-</p>
-
-<p align="center">
-<a href="#installation"><img src="https://img.shields.io/badge/Python-3.10%E2%80%933.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.10–3.12" height="20"></a>&nbsp;&nbsp;&nbsp;<a href="#python-api"><img src="https://img.shields.io/badge/PyTorch-%E2%89%A52.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.1 or later" height="20"></a>&nbsp;&nbsp;&nbsp;<a href="#checkpoint"><img src="https://img.shields.io/badge/Model-UPM-8054B3?style=flat-square" alt="UPM" height="20"></a>&nbsp;&nbsp;&nbsp;<a href="#inputs-and-outputs"><img src="https://img.shields.io/badge/AnnData-H5AD-339A94?style=flat-square" alt="AnnData H5AD" height="20"></a>
 </p>
 
 <p>
