@@ -28,8 +28,7 @@
 
 **UPM predicts single-cell transcriptomic responses to genetic, chemical, and cytokine interventions within a shared framework.** It combines the starting cell state with a perturbation representation and decodes the resulting expression profile. Combined interventions supply multiple perturbation inputs to the same model.
 
-This repository provides the **UPM inference implementation** for the standalone checkpoint used in the paper. It includes a PyTorch model, an AnnData command-line interface, and portable checkpoint loading on CPU or CUDA.
-
+This repository provides the **UPM inference implementation** for the standalone checkpoint used in the paper. 
 <p align="center">
   <a href="assets/fig1_ab.pdf">
     <img src="assets/fig1_ab.png" width="1000" alt="Figure 1, panels A and B. UPM intervention inputs and model architecture.">
