@@ -286,8 +286,13 @@ For usage questions or reproducible problems, [open a GitHub issue](https://gith
 
 ## Citation
 
-If you use this code, please cite our paper:
+If you use this code, please cite our paper.
 
-> **How Much Can AI Virtual Cells Gain from Unified Perturbational Modeling?**
-
-Publication details and BibTeX will be added here when available.
+```bibtex
+@misc{upm2026,
+  title={How Much Can AI Virtual Cells Gain from Unified Perturbational Modeling?},
+  year={2026},
+  note={Manuscript in preparation},
+  url={https://github.com/youlab2025/UPM}
+}
+```
