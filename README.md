@@ -284,6 +284,14 @@ The trust flag authorizes loading legacy pickle files, which can execute Python 
 
 For usage questions or reproducible problems, [open a GitHub issue](https://github.com/youlab2025/UPM/issues) with the command, package versions, and error message.
 
+## Resources
+
+- **Inference code and full usage guide:** [youlab2025/UPM on GitHub](https://github.com/youlab2025/UPM)
+- **Checkpoint and example files:** [youlab2025/UPM on Hugging Face](https://huggingface.co/youlab2025/UPM/tree/main)
+- **Open-X-Cell:** [Training and inference code](https://github.com/zongtingwei/Open-X-cell) · [Model checkpoints and examples](https://huggingface.co/zongting/Open-X-Cell)
+- **Questions and reproducible issues:** [GitHub Issues](https://github.com/youlab2025/UPM/issues)
+- **License:** [MIT](https://github.com/youlab2025/UPM/blob/main/LICENSE)
+
 ## Citation
 
 If you use this code, please cite our paper.
