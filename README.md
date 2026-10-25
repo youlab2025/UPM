@@ -290,7 +290,7 @@ For usage questions or reproducible problems, [open a GitHub issue](https://gith
 - **Checkpoint and example files:** [youlab2025/UPM on Hugging Face](https://huggingface.co/youlab2025/UPM/tree/main)
 - **Open-X-Cell:** [Training and inference code](https://github.com/zongtingwei/Open-X-cell) · [Model checkpoints and examples](https://huggingface.co/zongting/Open-X-Cell)
 - **Questions and reproducible issues:** [GitHub Issues](https://github.com/youlab2025/UPM/issues)
-- **License:** [MIT](https://github.com/youlab2025/UPM/blob/main/LICENSE)
+- **License:** [CC BY-NC 4.0](https://github.com/youlab2025/UPM/blob/main/LICENSE) (Creative Commons Attribution-NonCommercial 4.0 International).
 
 ## Citation
 
