@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<picture><img src="./assets/github-icon.svg" width="18" height="18" align="texttop" alt="GitHub"></picture>&nbsp;<a href="https://github.com/youlab2025/UPM"><strong>GitHub Code</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" width="18" height="18" align="texttop" alt="Hugging Face"></picture>&nbsp;<a href="https://huggingface.co/youlab2025/UPM"><strong>Hugging Face Checkpoints</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="./assets/biorxiv-icon.svg" width="18" height="18" align="texttop" alt="bioRxiv"></picture>&nbsp;<a href="https://www.biorxiv.org/content/10.64898/2026.10.25.761625v1"><strong>bioRxiv Paper</strong></a>
+<picture><img src="./assets/github-icon.svg" width="18" height="18" align="texttop" alt="GitHub"></picture>&nbsp;<a href="https://github.com/youlab2025/UPM"><strong>GitHub Code</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" width="18" height="18" align="texttop" alt="Hugging Face"></picture>&nbsp;<a href="https://huggingface.co/youlab2025/UPM"><strong>Hugging Face Checkpoints</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="./assets/biorxiv-icon.svg" width="18" height="18" align="texttop" alt="bioRxiv"></picture>&nbsp;<a href="https://www.biorxiv.org/content/10.64898/2026.10.25.761625v1"><strong> Paper</strong></a>
 </p>
 
 <p>
