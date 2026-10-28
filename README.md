@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<picture><img src="./assets/github-icon.svg" width="18" height="18" align="texttop" alt="GitHub"></picture>&nbsp;<a href="https://github.com/youlab2025/UPM"><strong>GitHub Code</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" width="18" height="18" align="texttop" alt="Hugging Face"></picture>&nbsp;<a href="https://huggingface.co/youlab2025/UPM"><strong>Hugging Face Checkpoints</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="./assets/biorxiv-icon.svg" width="18" height="18" align="texttop" alt="bioRxiv"></picture>&nbsp;<strong>bioRxiv (Coming soon)</strong>
+<picture><img src="./assets/github-icon.svg" width="18" height="18" align="texttop" alt="GitHub"></picture>&nbsp;<a href="https://github.com/youlab2025/UPM"><strong>GitHub Code</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg" width="18" height="18" align="texttop" alt="Hugging Face"></picture>&nbsp;<a href="https://huggingface.co/youlab2025/UPM"><strong>Hugging Face Checkpoints</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;<picture><img src="./assets/biorxiv-icon.svg" width="18" height="18" align="texttop" alt="bioRxiv"></picture>&nbsp;<a href="https://www.biorxiv.org/content/10.64898/2026.10.25.761625v1"><strong>bioRxiv Paper</strong></a>
 </p>
 
 <p>
@@ -294,13 +294,17 @@ For usage questions or reproducible problems, [open a GitHub issue](https://gith
 
 ## Citation
 
+**Paper:** [bioRxiv](https://www.biorxiv.org/content/10.64898/2026.10.25.761625v1) · **DOI:** [10.64898/2026.10.25.761625](https://doi.org/10.64898/2026.10.25.761625)
+
 If you use this code, please cite our paper.
 
 ```bibtex
-@misc{upm2026,
-  title={How Much Can AI Virtual Cells Gain from Unified Perturbational Modeling?},
+@article{upm2026,
+  title={How Much Can {AI} Virtual Cells Gain from Unified Perturbational Modeling?},
+  author={Wei, Zongting and Ye, Yuedian and Cui, Shuguang and Ma, Wenjing and You, Yuning},
+  journal={bioRxiv},
   year={2026},
-  note={Manuscript in preparation},
-  url={https://github.com/youlab2025/UPM}
+  doi={10.64898/2026.10.25.761625},
+  url={https://www.biorxiv.org/content/10.64898/2026.10.25.761625v1}
 }
 ```
